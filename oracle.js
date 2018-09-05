@@ -1,9 +1,9 @@
 const Web3 = require("web3");
-const rpcUrl = //link to ropesten network; https://mainnet.infura.io/INSERTYOURKEY
+const rpcUrl = // "https://ropsten.infura.io/InsertYourAPIKey"; //The url which links you to the ethereum network - Ropsten in this case.
 const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
-const privateKey = //0x+Private key;
-const account = web3.eth.accounts.privateKeyToAccount(privateKey)
-const fetch = require('node-fetch');
+const privateKey = //"0xYourPrivateKey"; //Private Key to sign transactions with.
+const account = web3.eth.accounts.privateKeyToAccount(privateKey); //account associated with private key
+const fetch = require('node-fetch'); //To fetch APIs
 const signedTxs = [];
 let nonce;
 
@@ -53,20 +53,23 @@ const abi = [
 	}
 ];
 
-const contractAddress = //Address of deployed contract;
+const contractAddress = //"address of deployed contract";
 const sampleContract = new web3.eth.Contract(abi, contractAddress);
 
 
-//sample sets number from the api below - gas price on mainnet.
+//Example Oracle sets number from the api below - gas price on mainnet.
 async function main() {
 
   let gasReq = await fetch('https://ethgasstation.info/json/ethgasAPI.json');
   let gasInfo = await gasReq.json();
   let gasAvg = await (gasInfo.average);
 
-  //makes the input an object for the sendTx function and triggers that
-  //Input is gasPrice from above
+  //sets input for setNumber function as gasAvg.
+	//Makes this into an object of the sendTx function (below) and triggers that function.
   await sendTx(sampleContract.methods.setNumber(gasAvg));
+
+	//print average gas price in console
+	console.log("Avg gas price",gasAvg);
 }
 
 //function sending the transaction from our configured wallet (the private key we provided)
@@ -86,10 +89,14 @@ async function sendTx(txObject) {
     gas : gasLimit, gasPrice
   };
 
+  //sign the transaction
   const signedTx = await web3.eth.accounts.signTransaction(tx, txKey);
   nonce++;
+
   // push transaction - dont wait for confirmations just wait till broadcasted
   signedTxs.push(signedTx.rawTransaction)
+
+	//send transaction
   web3.eth.sendSignedTransaction(signedTx.rawTransaction, {from:account});
 }
 
