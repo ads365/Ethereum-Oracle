@@ -17,4 +17,9 @@ Oracle.js consists of 2 core functions:
 In order to deploy and test the oracle:
 1. Clone the repository.
 2. Set up an ethereum wallet with ropsten ether (metamask is easiest).
+3. Deploy "sample.sol" [(remix is easiest)](https://remix.ethereum.org/).
+4. Obtain a provider for the Ethereum network, you can run your own node via mist however for simplicity we are using [Infura](https://infura.io/) which is a public gateway to the blockchain. Sign up and you will be provided with an API key.
+5. Edit oracle.js as directed by the comments in the script. You will need: your infura API key, your ethereum wallet's private key, [the smart contract's ABI ](https://ethereum.stackexchange.com/questions/27536/where-to-find-contract-abi-in-new-version-of-online-remix-solidity-compiler) (sample.sol ABI has been provided), and the address of the deployed contract.
+6. Run the bot: cd into the directory and run command "node oracle.js".
+
  
